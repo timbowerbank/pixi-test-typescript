@@ -2,6 +2,8 @@
 // typescript + Vite setup here: https://mrlinxed.com/blog/pixijs-setup-with-vite-and-typescript
 import {Application, Assets, Sprite, Graphics, Text, Container } from 'pixi.js';
 import { Button } from './lib/button';
+import manifest from './manifest.json';
+
 
 (async()=>{
 
@@ -24,6 +26,18 @@ import { Button } from './lib/button';
     globalThis.__PIXI_APP__ = app;
 
 
+    // *************************
+    // *** LOADING MANIFESTS ***
+    // *************************
+
+    // load from a manifest file
+    await Assets.init({manifest: manifest});
+
+    const gameScreen = await Assets.loadBundle('game_screen');
+    // const titleScreen = await Assets.loadBundle('title-screen');
+
+    const bubbleSprite = Sprite.from(gameScreen.bubble_bomb);
+    app.stage.addChild(bubbleSprite);
 
     // **********************
     // *** DRAWING SHAPES ***
@@ -59,7 +73,7 @@ import { Button } from './lib/button';
     // *************************
 
     // Step 1 - note that this is in the /public folder, so everything is relative to public
-    const texture = await Assets.load('images/sample.png');
+    const texture = await Assets.load('images/game-screen/sample.png');
     // Step 2
     const sprite = Sprite.from(texture);
     
